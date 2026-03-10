@@ -1,0 +1,13 @@
+*.pt
+*.npz
+*.pkl
+data/
+commonvoice/
+release_in_the_wild/
+Fake_ElevenLabs_Respeecher/
+unseen_test/
+asvspoof/
+venv/
+__pycache__/
+*.pyc
+*.png
