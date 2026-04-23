@@ -175,17 +175,6 @@ EchoVox/
 
 ---
 
-## Roadmap
-
-- [x] Phase 1 — Frozen Wav2Vec2 + MLP baseline
-- [x] Phase 2 — End-to-end Wav2Vec2 fine-tuning
-- [x] Phase 3 — CommonVoice + data augmentation
-- [ ] Phase 4 — WaveFake dataset integration
-- [ ] Phase 5 — Real-time microphone input
-- [ ] Phase 6 — Multi-language support
-
----
-
 ## Acknowledgements
 
 - [ASVspoof 2019](https://www.asvspoof.org/) — spoofed speech dataset
