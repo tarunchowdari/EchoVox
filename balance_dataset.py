@@ -1,14 +1,6 @@
 """
 EchoVox — Dataset Balancer
 ======================================
-Fixes domain overfitting by:
-  1. Oversampling modern fakes (ElevenLabs/TTS MP3s) via copying
-  2. Downsampling ASVspoof legacy fakes to a target count
-  3. Keeping all real files untouched
-
-Result: modern fakes = ~20% of total fakes, legacy fakes reduced to 15k
-This forces the MLP to pay attention to modern TTS artifacts.
-
 Usage:
     python balance_dataset.py
     python balance_dataset.py --fake_dir data/fake --target_legacy 15000 --target_modern_pct 0.20
@@ -27,6 +19,7 @@ def main(fake_dir: str, target_legacy: int, target_modern_pct: float):
     fake_path = Path(fake_dir)
 
     # ── Separate legacy (WAV = ASVspoof) from modern (MP3 = ElevenLabs/TTS) ──
+  
     all_files  = list(fake_path.iterdir())
     legacy     = [f for f in all_files if f.suffix.lower() == ".wav"]
     modern     = [f for f in all_files if f.suffix.lower() == ".mp3"]
@@ -47,10 +40,7 @@ def main(fake_dir: str, target_legacy: int, target_modern_pct: float):
         return
 
     # ── Step 1: Calculate targets ──────────────────────────────────────────────
-    # We want modern = target_modern_pct of total fakes
-    # total = target_legacy + modern_count
-    # modern_count / total = target_modern_pct
-    # Solve: modern_count = target_legacy * target_modern_pct / (1 - target_modern_pct)
+
     target_modern = int(target_legacy * target_modern_pct / (1 - target_modern_pct))
 
     print(f"\n  Target legacy fakes  : {target_legacy:,}")
@@ -59,6 +49,7 @@ def main(fake_dir: str, target_legacy: int, target_modern_pct: float):
     print(f"  Modern % of fakes    : {target_modern/(target_legacy+target_modern)*100:.1f}%")
 
     # ── Step 2: Downsample legacy WAVs ────────────────────────────────────────
+  
     backup_dir = fake_path.parent / "fake_legacy_backup"
     backup_dir.mkdir(exist_ok=True)
 
@@ -73,6 +64,7 @@ def main(fake_dir: str, target_legacy: int, target_modern_pct: float):
         print(f"\n  Legacy count ({len(legacy):,}) already <= target ({target_legacy:,}), skipping downsample")
 
     # ── Step 3: Oversample modern MP3s via copying ────────────────────────────
+  
     if len(modern) >= target_modern:
         print(f"\n  Modern count ({len(modern):,}) already >= target ({target_modern:,}), skipping oversample")
     else:
@@ -95,6 +87,7 @@ def main(fake_dir: str, target_legacy: int, target_modern_pct: float):
         print(f"  Done. Modern files now: {target_modern:,}")
 
     # ── Final count ────────────────────────────────────────────────────────────
+  
     final_legacy = len(list(fake_path.glob("*.wav")))
     final_modern = len(list(fake_path.glob("*.mp3")))
     total_fake   = final_legacy + final_modern
