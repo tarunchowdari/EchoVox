@@ -1,9 +1,6 @@
 """
-VeriVoice Sentinel — Step 1: Feature Extraction (with Augmentation)
+EchoVox — Step 1: Feature Extraction (with Augmentation)
 ====================================================================
-Walks data/real/ and data/fake/, extracts 768-dim Wav2Vec2 embeddings.
-Each file is processed MULTIPLE times with different augmentations to
-make the model robust to real-world audio conditions.
 
 Augmentations applied for real-world robustness:
   - Gaussian noise       (simulates mic/background noise)
